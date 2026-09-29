@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>منظم وقت الاجتماعات الاحترافي</title>
+ <title>منظم وقت الاجتماعات </title>
  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
  <script src="https://cdn.tailwindcss.com"></script>
  <script>
@@ -48,8 +48,8 @@
  <input type="text" id="speakerName" placeholder="اسم المتحدث (مثال: م. أحمد)" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-500">
  <input type="text" id="speakerTitle" placeholder="الصفة/الجهة (مثال: وكالة التخطيط)" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-500">
  <div class="flex gap-2">
- <input type="number" id="speakerMinutes" placeholder="دقيقة" value="10" min="0" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-sm text-center focus:outline-none focus:border-teal-500">
- <input type="number" id="speakerSeconds" placeholder="ثانية" value="0" min="0" max="59" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-sm text-center focus:outline-none focus:border-teal-500">
+ <input type="number" id="speakerMinutes" placeholder="دقائق (مثال: 10)" value="10" min="0" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-sm text-center focus:outline-none focus:border-teal-500">
+ <input type="number" id="speakerSeconds" placeholder="ثواني (مثال: 0)" value="0" min="0" max="59" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-3 text-sm text-center focus:outline-none focus:border-teal-500">
  </div>
  </div>
  <button onclick="addSpeaker()" class="mt-4 w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-xl transition shadow-lg"> إضافة للقائمة</button>
@@ -72,23 +72,20 @@
  </div>
  </section>
 
- <!-- شاشة العرض الكبرى (بدون أزرار - للعرض فقط) --> 
+ <!-- شاشة العرض الكبرى --> 
  <section id="displayView" class="hidden space-y-6">
  <div id="displayContainerCard" class="bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-2xl text-center relative overflow-hidden transition-all duration-300">
- <!-- شريط التقدم العلوي -->
  <div id="progressBar" class="absolute top-0 right-0 h-2 bg-teal-500 transition-all duration-1000" style="width: 100%"></div>
  
  <span id="currentStatusBadge" class="inline-block bg-teal-500/20 text-teal-400 px-4 py-1 rounded-full text-xs font-bold mb-4">يتحدث الآن</span>
  <h2 id="displaySpeakerName" class="text-3xl md:text-4xl font-black text-white mb-1">بانتظار بدء الاجتماع</h2>
  <p id="displaySpeakerTitle" class="text-slate-400 text-sm md:text-base mb-6">-</p>
 
- <!-- العداد الكبير بالأرقام الإنجليزية -->
  <div id="displayTimer" class="text-7xl md:text-9xl font-black tracking-wider text-teal-400 my-6 font-mono drop-shadow-lg">
  00:00
  </div>
  </div>
 
- <!-- بطاقة المتحدث التالي في العرض -->
  <div class="bg-slate-800/60 border border-slate-700/80 p-4 rounded-2xl flex items-center justify-between">
  <div class="flex items-center gap-3">
  <span class="bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-lg text-xs font-bold">التالي</span>
@@ -103,10 +100,8 @@
 
  </main>
 
- <!-- التوقيع الختامي --> 
  <footer class="text-center py-4 border-t border-slate-800 text-xs text-slate-500"> تطوير الدعم التقني في وكالة التخطيط </footer>
 
- <!-- ملف الصوت التنبيهي --> 
  <audio id="alarmSound" preload="auto">
  <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
  </audio>
@@ -120,7 +115,6 @@
  let isRunning = false;
  let alarmTriggered = false;
 
- // تبديل الواجهات بين التحكم والعرض 
  function switchView(view) {
  const controlView = document.getElementById('controlView');
  const displayView = document.getElementById('displayView');
@@ -140,7 +134,6 @@
  }
  }
 
- // إضافة متحدث جديد
  function addSpeaker() {
  const name = document.getElementById('speakerName').value.trim();
  const title = document.getElementById('speakerTitle').value.trim();
@@ -170,7 +163,6 @@
  }
  }
 
- // تحديث واجهات القوائم والعرض
  function updateUI() {
  const listEl = document.getElementById('controlQueueList');
  if (speakers.length === 0) {
@@ -184,15 +176,30 @@
  const secs = s.duration % 60;
  const timeStr = `${mins}:${secs.toString().padStart(2, '0')}`;
  const isCurrent = idx === currentIndex;
+ const isPassed = idx < currentIndex;
+
+ let borderClass = 'bg-slate-900 border-slate-700';
+ let textClass = 'text-slate-200';
+ let statusText = '';
+
+ if (isCurrent) {
+ borderClass = 'bg-teal-950/40 border-teal-600';
+ textClass = 'text-teal-400';
+ statusText = '(يتحدث حالياً)';
+ } else if (isPassed) {
+ borderClass = 'bg-slate-800/40 border-slate-800 opacity-60';
+ textClass = 'text-slate-500 line-through';
+ statusText = '(انتهى)';
+ }
 
  html += `
- <div class="flex items-center justify-between p-3 rounded-xl border ${isCurrent ? 'bg-teal-950/40 border-teal-600' : 'bg-slate-900 border-slate-700'}">
+ <div class="flex items-center justify-between p-3 rounded-xl border transition-all ${borderClass}">
  <div>
- <div class="font-bold text-sm ${isCurrent ? 'text-teal-400' : 'text-slate-200'}">${idx + 1}. ${s.name} ${isCurrent ? '(يتحدث حالياً)' : ''}</div>
- <div class="text-xs text-slate-400">${s.title}</div>
+ <div class="font-bold text-sm ${textClass}">${idx + 1}. ${s.name} <span class="font-normal text-xs ml-1">${statusText}</span></div>
+ <div class="text-xs ${isPassed ? 'text-slate-600' : 'text-slate-400'}">${s.title}</div>
  </div>
  <div class="flex items-center gap-3">
- <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-slate-300">${timeStr}</span>
+ <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-slate-300 opacity-80">${timeStr}</span>
  <button onclick="removeSpeaker(${idx})" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">حذف</button>
  </div>
  </div>
@@ -200,7 +207,6 @@
  });
  listEl.innerHTML = html;
 
- // تحديث بطاقة المتحدث التالي
  if (currentIndex + 1 < speakers.length) {
  const nextS = speakers[currentIndex + 1];
  const nMins = Math.floor(nextS.duration / 60);
@@ -209,39 +215,54 @@
  document.getElementById('displayNextTitle').innerText = nextS.title;
  document.getElementById('displayNextTime').innerText = `${nMins}:${nSecs.toString().padStart(2, '0')}`;
  } else {
- document.getElementById('displayNextName').innerText = 'لا يوجد متحدث ';
+ document.getElementById('displayNextName').innerText = 'لا يوجد متحدث تالٍ';
  document.getElementById('displayNextTitle').innerText = '-';
  document.getElementById('displayNextTime').innerText = '--:--';
  }
  }
 
- // حذف متحدث
  function removeSpeaker(idx) {
  speakers.splice(idx, 1);
- if (currentIndex >= speakers.length && speakers.length > 0) {
- currentIndex = speakers.length - 1;
- }
+ 
+ if (speakers.length === 0) {
+ currentIndex = 0;
+ resetDisplay();
  updateUI();
- if (speakers.length > 0) {
+ return;
+ }
+
+ if (idx < currentIndex) {
+ currentIndex--;
+ updateUI();
+ } else if (idx === currentIndex) {
+ if (currentIndex >= speakers.length) {
+ currentIndex = speakers.length;
+ }
  loadSpeaker(currentIndex);
  } else {
- resetDisplay();
+ updateUI();
  }
  }
 
- // تحميل متحدث
  function loadSpeaker(idx) {
- if (idx < speakers.length) {
  currentIndex = idx;
+ stopTimer();
+ alarmTriggered = false;
+ removeFlashEffect();
+
+ const playBtn = document.getElementById('playPauseBtn');
+
+ if (idx < speakers.length) {
  totalSpeakerTime = speakers[idx].duration;
  timeLeft = totalSpeakerTime;
  
  document.getElementById('displaySpeakerName').innerText = speakers[idx].name;
  document.getElementById('displaySpeakerTitle').innerText = speakers[idx].title;
  
- stopTimer();
- alarmTriggered = false;
- removeFlashEffect();
+ playBtn.innerText = ' بدء المؤقت';
+ playBtn.className = "flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold shadow transition text-sm";
+ playBtn.disabled = false;
+ 
  updateTimerDisplay();
  updateUI();
  } else {
@@ -249,13 +270,18 @@
  document.getElementById('displaySpeakerTitle').innerText = "شكراً لحضوركم";
  document.getElementById('displayTimer').innerText = "00:00";
  document.getElementById('currentStatusBadge').innerText = "انتهى الاجتماع";
- stopTimer();
+ document.getElementById('progressBar').style.width = '0%';
+ 
+ playBtn.innerText = ' انتهت القائمة';
+ playBtn.className = "flex-1 px-4 py-3 bg-slate-700 text-slate-500 rounded-xl font-bold shadow transition text-sm cursor-not-allowed";
+ playBtn.disabled = true;
+ 
+ updateUI();
  }
  }
 
- // تشغيل أو إيقاف العداد 
  function toggleTimer() {
- if (speakers.length === 0) return;
+ if (speakers.length === 0 || currentIndex >= speakers.length) return;
 
  if (isRunning) {
  stopTimer();
@@ -275,21 +301,20 @@
  isRunning = false;
  }
 
- // العد التنازلي وتفعيل الوميض والصوت وتحويل الوسم 
  function countdown() {
  if (timeLeft > 0) {
  timeLeft--;
  updateTimerDisplay();
  } else {
  stopTimer();
- document.getElementById('playPauseBtn').innerText = ' انتهى الوقت';
+ const playBtn = document.getElementById('playPauseBtn');
+ playBtn.innerText = ' انتهى الوقت';
+ playBtn.className = "flex-1 px-4 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold shadow transition text-sm";
  
- // تحديث النص إلى "انتهى الوقت" عند بلوغ الأصفار
  const badge = document.getElementById('currentStatusBadge');
  badge.innerText = "انتهى الوقت";
  badge.className = "inline-block bg-red-500/20 text-red-400 px-4 py-1 rounded-full text-xs font-bold mb-4";
 
- // تشغيل الصوت وتفعيل وميض الحاوية بوضوح
  if (!alarmTriggered) {
  const sound = document.getElementById('alarmSound');
  sound.play().catch(e => console.log('تعذر تشغيل الصوت تلقائياً'));
@@ -299,7 +324,6 @@
  }
  }
 
- // تأثير الوميض لحاوية العرض عند انتهاء الوقت 
  function triggerFlashEffect() {
  const card = document.getElementById('displayContainerCard');
  card.classList.add('animate-pulse', 'border-red-500', 'bg-red-950/30');
@@ -310,7 +334,6 @@
  card.classList.remove('animate-pulse', 'border-red-500', 'bg-red-950/30');
  }
 
- // تحديث الأرقام الإنجليزية والألوان 
  function updateTimerDisplay() {
  const mins = Math.floor(timeLeft / 60);
  const secs = timeLeft % 60;
@@ -340,24 +363,27 @@
  }
  }
 
- // إضافة دقيقة 
  function addOneMinute() {
- if (speakers.length > 0) {
+ if (speakers.length > 0 && currentIndex < speakers.length) {
  timeLeft += 60;
  totalSpeakerTime += 60;
  alarmTriggered = false;
  removeFlashEffect();
  
- // إعادة وسم الحالة إلى "يتحدث الآن" في حال تمت إضافة وقت 
  const badge = document.getElementById('currentStatusBadge');
  badge.innerText = "يتحدث الآن";
  badge.className = "inline-block bg-teal-500/20 text-teal-400 px-4 py-1 rounded-full text-xs font-bold mb-4";
 
  updateTimerDisplay();
+ 
+ // إذا كان الزر معلقاً على "انتهى الوقت" وأضفنا دقيقة، نجعله جاهزاً للاستئناف
+ if (!isRunning) {
+ document.getElementById('playPauseBtn').innerText = ' استئناف المؤقت';
+ document.getElementById('playPauseBtn').className = "flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold shadow transition text-sm";
+ }
  }
  }
 
- // التالي
  function nextSpeaker() {
  alarmTriggered = false;
  removeFlashEffect();
@@ -369,7 +395,7 @@
  if (currentIndex + 1 < speakers.length) {
  loadSpeaker(currentIndex + 1);
  } else {
- loadSpeaker(speakers.length);
+ loadSpeaker(speakers.length); // إنهاء الاجتماع
  }
  }
 
@@ -380,6 +406,12 @@
  const badge = document.getElementById('currentStatusBadge');
  badge.innerText = "يتحدث الآن";
  badge.className = "inline-block bg-teal-500/20 text-teal-400 px-4 py-1 rounded-full text-xs font-bold mb-4";
+ 
+ const playBtn = document.getElementById('playPauseBtn');
+ playBtn.innerText = ' بدء المؤقت';
+ playBtn.className = "flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold shadow transition text-sm";
+ playBtn.disabled = false;
+ 
  removeFlashEffect();
  }
  </script>
