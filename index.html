@@ -23,7 +23,8 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between p-4 md:p-6">
 
- <!-- رأس الصفحة --> <header class="max-w-4xl mx-auto w-full bg-slate-800/80 backdrop-blur border border-slate-700 p-4 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+ <!-- رأس الصفحة --> 
+ <header class="max-w-4xl mx-auto w-full bg-slate-800/80 backdrop-blur border border-slate-700 p-4 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
  <div>
  <h1 class="text-xl font-bold text-teal-400 flex items-center gap-2">
  <span> </span> منظم وقت الاجتماعات الذكي
@@ -36,7 +37,8 @@
  </div>
  </header>
 
- <!-- المحتوى الرئيسي --> <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
+ <!-- المحتوى الرئيسي --> 
+ <main class="max-w-4xl mx-auto w-full my-6 flex-grow">
 
  <!-- لوحة التحكم -->
  <section id="controlView" class="space-y-6">
@@ -53,7 +55,10 @@
  <button onclick="addSpeaker()" class="mt-4 w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-xl transition shadow-lg"> إضافة للقائمة</button>
  </div>
 
- <!-- لوحة التحكم السريع وإدارة القائمة --> <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl shadow-xl space-y-4"> <h2 class="text-lg font-bold text-slate-200 border-b border-slate-700 pb-2">لوحة التحكم السريع وإدارة القائمة</h2> 
+ <!-- لوحة التحكم السريع وإدارة القائمة --> 
+ <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl shadow-xl space-y-4"> 
+ <h2 class="text-lg font-bold text-slate-200 border-b border-slate-700 pb-2">لوحة التحكم السريع وإدارة القائمة</h2> 
+ 
  <!-- أزرار التحكم الفوري -->
  <div class="flex flex-wrap gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
  <button onclick="toggleTimer()" id="playPauseBtn" class="flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold shadow transition text-sm"> بدء المؤقت</button>
@@ -67,7 +72,8 @@
  </div>
  </section>
 
- <!-- شاشة العرض الكبرى (بدون أزرار - للعرض فقط) --> <section id="displayView" class="hidden space-y-6">
+ <!-- شاشة العرض الكبرى (بدون أزرار - للعرض فقط) --> 
+ <section id="displayView" class="hidden space-y-6">
  <div id="displayContainerCard" class="bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-2xl text-center relative overflow-hidden transition-all duration-300">
  <!-- شريط التقدم العلوي -->
  <div id="progressBar" class="absolute top-0 right-0 h-2 bg-teal-500 transition-all duration-1000" style="width: 100%"></div>
@@ -97,9 +103,11 @@
 
  </main>
 
- <!-- التوقيع الختامي --> <footer class="text-center py-4 border-t border-slate-800 text-xs text-slate-500"> تطوير الدعم التقني في وكالة التخطيط </footer>
+ <!-- التوقيع الختامي --> 
+ <footer class="text-center py-4 border-t border-slate-800 text-xs text-slate-500"> تطوير الدعم التقني في وكالة التخطيط </footer>
 
- <!-- ملف الصوت التنبيهي --> <audio id="alarmSound" preload="auto">
+ <!-- ملف الصوت التنبيهي --> 
+ <audio id="alarmSound" preload="auto">
  <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
  </audio>
 
@@ -112,7 +120,8 @@
  let isRunning = false;
  let alarmTriggered = false;
 
- // تبديل الواجهات بين التحكم والعرض function switchView(view) {
+ // تبديل الواجهات بين التحكم والعرض 
+ function switchView(view) {
  const controlView = document.getElementById('controlView');
  const displayView = document.getElementById('displayView');
  const btnControl = document.getElementById('btnControl');
@@ -200,7 +209,7 @@
  document.getElementById('displayNextTitle').innerText = nextS.title;
  document.getElementById('displayNextTime').innerText = `${nMins}:${nSecs.toString().padStart(2, '0')}`;
  } else {
- document.getElementById('displayNextName').innerText = 'لا يوجد متحدث تالٍ';
+ document.getElementById('displayNextName').innerText = 'لا يوجد متحدث ';
  document.getElementById('displayNextTitle').innerText = '-';
  document.getElementById('displayNextTime').innerText = '--:--';
  }
@@ -244,7 +253,8 @@
  }
  }
 
- // تشغيل أو إيقاف العداد function toggleTimer() {
+ // تشغيل أو إيقاف العداد 
+ function toggleTimer() {
  if (speakers.length === 0) return;
 
  if (isRunning) {
@@ -265,7 +275,8 @@
  isRunning = false;
  }
 
- // العد التنازلي وتفعيل الوميض والصوت وتحويل الوسم function countdown() {
+ // العد التنازلي وتفعيل الوميض والصوت وتحويل الوسم 
+ function countdown() {
  if (timeLeft > 0) {
  timeLeft--;
  updateTimerDisplay();
@@ -288,7 +299,8 @@
  }
  }
 
- // تأثير الوميض لحاوية العرض عند انتهاء الوقت function triggerFlashEffect() {
+ // تأثير الوميض لحاوية العرض عند انتهاء الوقت 
+ function triggerFlashEffect() {
  const card = document.getElementById('displayContainerCard');
  card.classList.add('animate-pulse', 'border-red-500', 'bg-red-950/30');
  }
@@ -298,7 +310,8 @@
  card.classList.remove('animate-pulse', 'border-red-500', 'bg-red-950/30');
  }
 
- // تحديث الأرقام الإنجليزية والألوان function updateTimerDisplay() {
+ // تحديث الأرقام الإنجليزية والألوان 
+ function updateTimerDisplay() {
  const mins = Math.floor(timeLeft / 60);
  const secs = timeLeft % 60;
  
@@ -327,13 +340,16 @@
  }
  }
 
- // إضافة دقيقة function addOneMinute() {
+ // إضافة دقيقة 
+ function addOneMinute() {
  if (speakers.length > 0) {
  timeLeft += 60;
  totalSpeakerTime += 60;
  alarmTriggered = false;
  removeFlashEffect();
- // إعادة وسم الحالة إلى "يتحدث الآن" في حال تمت إضافة وقت const badge = document.getElementById('currentStatusBadge');
+ 
+ // إعادة وسم الحالة إلى "يتحدث الآن" في حال تمت إضافة وقت 
+ const badge = document.getElementById('currentStatusBadge');
  badge.innerText = "يتحدث الآن";
  badge.className = "inline-block bg-teal-500/20 text-teal-400 px-4 py-1 rounded-full text-xs font-bold mb-4";
 
