@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>منظم وقت الاجتماعات </title>
+ <title>منظم وقت الاجتماعات الاحترافي</title>
  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
  <script src="https://cdn.tailwindcss.com"></script>
  <script>
@@ -27,7 +27,7 @@
  <header class="max-w-4xl mx-auto w-full bg-slate-800/80 backdrop-blur border border-slate-700 p-4 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
  <div>
  <h1 class="text-xl font-bold text-teal-400 flex items-center gap-2">
- <span> </span> منظم وقت الاجتماعات 
+ <span> </span> منظم وقت الاجتماعات الذكي
  </h1>
  <p class="text-xs text-slate-400">إدارة فعالة للنقاشات والمداخلات</p>
  </div>
@@ -102,7 +102,8 @@
 
  <footer class="text-center py-4 border-t border-slate-800 text-xs text-slate-500"> تطوير الدعم التقني في وكالة التخطيط </footer>
 
- <audio id="alarmSound" preload="auto">
+ <!-- إضافة خاصية التكرار للصوت (loop) -->
+ <audio id="alarmSound" preload="auto" loop>
  <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
  </audio>
 
@@ -332,6 +333,11 @@
  function removeFlashEffect() {
  const card = document.getElementById('displayContainerCard');
  card.classList.remove('animate-pulse', 'border-red-500', 'bg-red-950/30');
+ 
+ // إيقاف الصوت وإعادته للبداية عند التنقل أو الإضافة
+ const sound = document.getElementById('alarmSound');
+ sound.pause();
+ sound.currentTime = 0;
  }
 
  function updateTimerDisplay() {
@@ -376,7 +382,7 @@
 
  updateTimerDisplay();
  
- // إذا كان الزر معلقاً على "انتهى الوقت" وأضفنا دقيقة، نجعله جاهزاً للاستئناف
+ // استعادة شكل الزر إذا كان قد توقف سابقاً
  if (!isRunning) {
  document.getElementById('playPauseBtn').innerText = ' استئناف المؤقت';
  document.getElementById('playPauseBtn').className = "flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold shadow transition text-sm";
@@ -395,7 +401,7 @@
  if (currentIndex + 1 < speakers.length) {
  loadSpeaker(currentIndex + 1);
  } else {
- loadSpeaker(speakers.length); // إنهاء الاجتماع
+ loadSpeaker(speakers.length);
  }
  }
 
